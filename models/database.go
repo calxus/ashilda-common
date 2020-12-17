@@ -15,7 +15,7 @@ type database struct {
 	connection *sql.DB
 }
 
-func newDatabase() *database {
+func NewDatabase() *database {
 	return &database{
 		host:     os.Getenv("DATABASE_HOST"),
 		port:     os.Getenv("DATABASE_PORT"),
