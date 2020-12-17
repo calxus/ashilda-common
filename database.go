@@ -7,30 +7,30 @@ import (
 )
 
 type Database struct {
-	host       string
-	port       string
-	name       string
-	username   string
-	password   string
-	connection *sql.DB
+	Host       string
+	Port       string
+	Name       string
+	Username   string
+	Password   string
+	Connection *sql.DB
 }
 
 func NewDatabase() *Database {
 	return &Database{
-		host:     os.Getenv("DATABASE_HOST"),
-		port:     os.Getenv("DATABASE_PORT"),
-		name:     os.Getenv("DATABASE_NAME"),
-		username: os.Getenv("DATABASE_USERNAME"),
-		password: os.Getenv("DATABASE_PASSWORD"),
+		Host:     os.Getenv("DATABASE_HOST"),
+		Port:     os.Getenv("DATABASE_PORT"),
+		Name:     os.Getenv("DATABASE_NAME"),
+		Username: os.Getenv("DATABASE_USERNAME"),
+		Password: os.Getenv("DATABASE_PASSWORD"),
 	}
 }
 
 func (db *Database) Connect() {
 	var err error
-	db.connection, err = sql.Open("mysql", db.username+":"+db.password+"@tcp("+db.host+":"+db.port+")/"+db.name)
+	db.Connection, err = sql.Open("mysql", db.Username+":"+db.Password+"@tcp("+db.Host+":"+db.Port+")/"+db.Name)
 	if err != nil {
 		panic(err.Error())
 	}
 	fmt.Println("Connection to database successful")
-	defer db.connection.Close()
+	defer db.Connection.Close()
 }
