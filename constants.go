@@ -18,5 +18,5 @@ const (
 	GREATER_THAN string = ">"
 	EQUALS string = "="
 	COMMA string = ","
-	APOSTROPHE string = "\""
+	APOSTROPHE string = "'"
 )

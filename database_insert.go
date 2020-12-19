@@ -22,10 +22,18 @@ func (di *DatabaseInsert) AddEntry(c string, v string) {
 }
 
 func (di *DatabaseInsert) Generate() string {
-	statement := INSERT_INTO + SPACE + di.table + SPACE + joinList(di.columns) + SPACE + VALUES + SPACE + joinList(di.values) + SEMI_COLON
+	statement := INSERT_INTO + SPACE + di.table + SPACE + joinTables(di.columns) + SPACE + VALUES + SPACE + joinValues(di.values) + SEMI_COLON
 	return statement
 }
 
-func joinList(l []string) string {
+func joinTables(l []string) string {
 	return LEFT_PARENTHESES + strings.Join(l, COMMA + SPACE) + RIGHT_PARENTHESES
+}
+
+func joinValues(l []string) string {
+	newList := []string{}
+	for _, s := range l {
+		newList = append(newList, APOSTROPHE + s + APOSTROPHE)
+	}
+	return LEFT_PARENTHESES + strings.Join(newList, COMMA + SPACE) + RIGHT_PARENTHESES
 }
