@@ -35,7 +35,6 @@ func (db *Database) Connect() {
 		panic(err.Error())
 	}
 	fmt.Println("Connection to database successful")
-	defer db.Connection.Close()
 }
 
 func (db *Database) ExecuteSelect(ds *DatabaseSelect) (*sql.Rows, error) {
