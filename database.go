@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 	"log"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 type Database struct {
