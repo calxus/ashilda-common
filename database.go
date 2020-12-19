@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"os"
+	"log"
 )
 
 type Database struct {
@@ -16,7 +17,7 @@ type Database struct {
 }
 
 func NewDatabase() *Database {
-	return &Database{
+	return &Database {
 		Host:     os.Getenv("DATABASE_HOST"),
 		Port:     os.Getenv("DATABASE_PORT"),
 		Name:     os.Getenv("DATABASE_NAME"),
@@ -33,4 +34,36 @@ func (db *Database) Connect() {
 	}
 	fmt.Println("Connection to database successful")
 	defer db.Connection.Close()
+}
+
+func (db *Database) ExecuteSelect(ds *DatabaseSelect) (*sql.Rows, error) {
+	rows, err := db.Connection.Query(ds.Generate())
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	return rows, err
+}
+
+func (db *Database) ExecuteUpdate(du *DatabaseUpdate) error {
+	_, err := db.Connection.Exec(du.Generate())
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	return err
+}
+
+func (db *Database) ExecuteDelete(dd *DatabaseDelete) error {
+	_, err := db.Connection.Exec(dd.Generate())
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	return err
+}
+
+func (db *Database) ExecuteInsert(di *DatabaseInsert) error {
+	_, err := db.Connection.Exec(di.Generate())
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	return err
 }
