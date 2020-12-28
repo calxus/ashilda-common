@@ -2,57 +2,64 @@ package models
 
 import "strings"
 
+// DatabaseUpdate type represents an SQL update statement
 type DatabaseUpdate struct {
-	table string
+	table      string
 	statements []UpdateStatement
 	conditions []UpdateCondition
 }
 
+// UpdateStatement type represents a single update within an SQL statement
 type UpdateStatement struct {
 	column string
-	value string
+	value  string
 }
 
+// UpdateCondition type represents a condition within an SQL statement
 type UpdateCondition struct {
-	column string
+	column   string
 	operator string
-	value string
+	value    string
 }
 
+// NewDatabaseUpdate method to construct the DatabaseUpdate type
 func NewDatabaseUpdate(t string) *DatabaseUpdate {
-	return &DatabaseUpdate {
-		table: t,
+	return &DatabaseUpdate{
+		table:      t,
 		statements: []UpdateStatement{},
 		conditions: []UpdateCondition{},
 	}
 }
 
+// AddStatement method to add a single update statement to SQL query
 func (du *DatabaseUpdate) AddStatement(c string, v string) {
-	newStatement := UpdateStatement {
+	newStatement := UpdateStatement{
 		column: c,
-		value: v,
+		value:  v,
 	}
 	du.statements = append(du.statements, newStatement)
 }
 
+// AddCondition method to add a single condition to the SQL query
 func (du *DatabaseUpdate) AddCondition(c string, o string, v string) {
-	newCondition := UpdateCondition {
-		column: c,
+	newCondition := UpdateCondition{
+		column:   c,
 		operator: o,
-		value: v,
+		value:    v,
 	}
 	du.conditions = append(du.conditions, newCondition)
 }
 
+// Generate method compiles the query and returns the generated string
 func (du *DatabaseUpdate) Generate() string {
-	statement := UPDATE + SPACE + du.table + SPACE + SET
-	if (len(du.statements) > 0) {
-		statement = statement + SPACE + du.generateUpdateStatements()
+	statement := Update + Space + du.table + Space + Set
+	if len(du.statements) > 0 {
+		statement = statement + Space + du.generateUpdateStatements()
 	}
-	if (len(du.conditions) > 0) {
-		statement = statement + SPACE + du.generateUpdateConditions()
+	if len(du.conditions) > 0 {
+		statement = statement + Space + du.generateUpdateConditions()
 	}
-	return statement + SEMI_COLON
+	return statement + SemiColon
 }
 
 func (du *DatabaseUpdate) generateUpdateStatements() string {
@@ -60,11 +67,11 @@ func (du *DatabaseUpdate) generateUpdateStatements() string {
 	for i := 0; i < len(du.statements); i++ {
 		statements = append(statements, du.statements[i].generateUpdateStatement())
 	}
-	return strings.Join(statements, COMMA + SPACE)
+	return strings.Join(statements, Comma+Space)
 }
 
 func (s *UpdateStatement) generateUpdateStatement() string {
-	return s.column + SPACE + EQUALS + SPACE + APOSTROPHE + s.value + APOSTROPHE
+	return s.column + Space + Equals + Space + Apostrophe + s.value + Apostrophe
 }
 
 func (du *DatabaseUpdate) generateUpdateConditions() string {
@@ -72,9 +79,9 @@ func (du *DatabaseUpdate) generateUpdateConditions() string {
 	for i := 0; i < len(du.conditions); i++ {
 		conditions = append(conditions, du.conditions[i].generateConditionStatement())
 	}
-	return WHERE + SPACE + strings.Join(conditions, SPACE + AND + SPACE)
+	return Where + Space + strings.Join(conditions, Space+And+Space)
 }
 
 func (c *UpdateCondition) generateConditionStatement() string {
-	return c.column + SPACE + c.operator + SPACE + APOSTROPHE + c.value + APOSTROPHE
+	return c.column + Space + c.operator + Space + Apostrophe + c.value + Apostrophe
 }
